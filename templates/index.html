@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | Code Clash{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container text-center hero-content">
+        <h1 class="hero-title neon-text-blue mb-3" data-aos="zoom-in">Code Clash</h1>
+        
+        <div class="hero-subtitle mb-5">
+            <span id="typed-text"></span>
+        </div>
+        
+        <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-md-8">
+                <div class="glass-card mb-5">
+                    <p class="fs-5 mb-4">Choose any two programming languages and let them battle based on real-world capabilities. AI Narrated, dynamically animated, purely based on facts.</p>
+                    
+                    <div class="d-flex justify-content-center gap-4">
+                        <a href="{{ url_for('select') }}" class="btn-neon">Start Battle <i class="fas fa-play ms-2"></i></a>
+                        <a href="#" class="btn-neon btn-neon-purple">Leaderboard <i class="fas fa-trophy ms-2"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5 mb-5" data-aos="fade-up" data-aos-delay="400">
+            <div class="col-md-4">
+                <div class="glass-card text-center h-100">
+                    <h3 class="neon-text-blue mb-3">1. Select</h3>
+                    <p class="text-secondary">Pick from over 20+ programming languages, each with unique abilities and stats.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card text-center h-100">
+                    <h3 class="neon-text-purple mb-3">2. Arena</h3>
+                    <p class="text-secondary">AI, Web Dev, Game Dev, or Security. The domain changes the rules of the fight.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card text-center h-100">
+                    <h3 class="neon-text-blue mb-3">3. Clash</h3>
+                    <p class="text-secondary">Enjoy Gemini AI's dynamic narration and learn about real-world language strengths.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}

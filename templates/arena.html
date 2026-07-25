@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Select Arena | Code Clash{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5" data-aos="fade-down">
+        <h1 class="neon-text-purple">Choose The Battlefield</h1>
+        <p class="text-secondary fs-5 text-uppercase fw-bold">{{ lang1 }} <span class="text-danger">VS</span> {{ lang2 }}</p>
+    </div>
+
+    <div class="row justify-content-center g-4">
+        {% for domain in domains %}
+        <div class="col-md-6 col-lg-3" data-aos="flip-left" data-aos-delay="{{ loop.index0 * 100 }}">
+            <a href="{{ url_for('battle', lang1=lang1, lang2=lang2, domain=domain.id) }}" class="text-decoration-none">
+                <div class="glass-card text-center h-100 arena-card">
+                    <i class="{{ domain.icon }} fs-1 mb-3 text-white"></i>
+                    <h3 class="neon-text-blue mb-2">{{ domain.name }}</h3>
+                    <p class="text-secondary small">{{ domain.desc }}</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+    .arena-card {
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .arena-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--accent-purple);
+        box-shadow: var(--neon-purple);
+    }
+</style>
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
