@@ -1,46 +1,265 @@
 {% extends 'base.html' %}
 
-{% block title %}Home | Code Clash{% endblock %}
+{% block title %}Code Clash — Battle of Programming Languages{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+<style>
+    /* ═══ HERO ═══ */
+    .hero-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        margin-top: -80px;
+        overflow: hidden;
+    }
+    .hero-title {
+        font-size: 5.5rem;
+        font-weight: 900;
+        letter-spacing: -2px;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #38bdf8, #c084fc, #f472b6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 0 30px rgba(56,189,248,0.3));
+    }
+    .hero-tagline {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1rem;
+        color: #64748b;
+        letter-spacing: 8px;
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+    }
+    .hero-desc {
+        font-size: 1.25rem;
+        color: #94a3b8;
+        max-width: 600px;
+        margin: 0 auto 2.5rem;
+        line-height: 1.8;
+    }
+
+    /* ═══ CTA BUTTONS ═══ */
+    .cta-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 40px;
+        background: linear-gradient(135deg, #38bdf8, #818cf8);
+        color: #fff;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        border: none;
+        border-radius: 12px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 30px rgba(56,189,248,0.3), 0 8px 25px rgba(0,0,0,0.3);
+    }
+    .cta-primary:hover {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 0 50px rgba(56,189,248,0.5), 0 12px 35px rgba(0,0,0,0.4);
+        color: #fff;
+    }
+    .cta-primary i {
+        font-size: 1.3rem;
+        animation: pulse-icon 2s ease-in-out infinite;
+    }
+    @keyframes pulse-icon {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+    }
+
+    /* ═══ FLOATING LANGUAGE ICONS ═══ */
+    .float-icons {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
+    .float-icon {
+        position: absolute;
+        font-size: 3rem;
+        opacity: 0.08;
+        animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+        0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+        10% { opacity: 0.08; }
+        90% { opacity: 0.08; }
+        100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ═══ HOW IT WORKS ═══ */
+    .steps-section {
+        position: relative;
+        z-index: 2;
+    }
+    .step-card {
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 20px;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .step-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .step-card:hover::before { opacity: 1; }
+    .step-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(56,189,248,0.2);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .step-num {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 3rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #38bdf8, #c084fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+        margin-bottom: 1rem;
+    }
+    .step-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+    .step-card h3 {
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        margin-bottom: 0.8rem;
+    }
+    .step-card p {
+        color: #64748b;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+
+    /* ═══ STATS STRIP ═══ */
+    .stats-strip {
+        background: rgba(15,23,42,0.7);
+        border-top: 1px solid rgba(255,255,255,0.05);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 2rem 0;
+    }
+    .stat-item {
+        text-align: center;
+    }
+    .stat-num {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #38bdf8;
+    }
+    .stat-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        color: #64748b;
+        margin-top: 4px;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="hero-section">
-    <div class="container text-center hero-content">
-        <h1 class="hero-title neon-text-blue mb-3" data-aos="zoom-in">Code Clash</h1>
-        
-        <div class="hero-subtitle mb-5">
-            <span id="typed-text"></span>
-        </div>
-        
-        <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="200">
-            <div class="col-md-8">
-                <div class="glass-card mb-5">
-                    <p class="fs-5 mb-4">Choose any two programming languages and let them battle based on real-world capabilities. AI Narrated, dynamically animated, purely based on facts.</p>
-                    
-                    <div class="d-flex justify-content-center gap-4">
-                        <a href="{{ url_for('select') }}" class="btn-neon">Start Battle <i class="fas fa-play ms-2"></i></a>
-                        <a href="#" class="btn-neon btn-neon-purple">Leaderboard <i class="fas fa-trophy ms-2"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Floating language icons background -->
+    <div class="float-icons" id="float-icons"></div>
 
-        <div class="row mt-5 mb-5" data-aos="fade-up" data-aos-delay="400">
-            <div class="col-md-4">
-                <div class="glass-card text-center h-100">
-                    <h3 class="neon-text-blue mb-3">1. Select</h3>
-                    <p class="text-secondary">Pick from over 20+ programming languages, each with unique abilities and stats.</p>
+    <div class="container text-center position-relative" style="z-index:2;">
+        <div class="hero-content">
+            <p class="hero-tagline" data-aos="fade-down" data-aos-delay="100">Battle of Programming Languages</p>
+            <h1 class="hero-title" data-aos="zoom-in">Code Clash</h1>
+
+            <div class="my-4" data-aos="fade-up" data-aos-delay="200">
+                <span id="typed-text" style="font-size:1.4rem; color:#94a3b8;"></span>
+            </div>
+
+            <p class="hero-desc" data-aos="fade-up" data-aos-delay="300">
+                Pick two languages. Choose the battlefield. Watch them fight with <strong style="color:#38bdf8;">swords</strong>, 
+                <strong style="color:#c084fc;">special powers</strong>, and real-world stats. The stronger language wins.
+            </p>
+
+            <div data-aos="fade-up" data-aos-delay="400">
+                <a href="{{ url_for('select') }}" class="cta-primary">
+                    <i class="fas fa-swords"></i>
+                    Enter The Arena
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip" data-aos="fade-up">
+    <div class="container">
+        <div class="row">
+            <div class="col-3 stat-item">
+                <div class="stat-num">12</div>
+                <div class="stat-label">Languages</div>
+            </div>
+            <div class="col-3 stat-item">
+                <div class="stat-num">36</div>
+                <div class="stat-label">Special Moves</div>
+            </div>
+            <div class="col-3 stat-item">
+                <div class="stat-num">4</div>
+                <div class="stat-label">Arenas</div>
+            </div>
+            <div class="col-3 stat-item">
+                <div class="stat-num">∞</div>
+                <div class="stat-label">Battles</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="steps-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 orbitron" style="letter-spacing:4px; font-size:0.9rem; color:#64748b;" data-aos="fade-up">HOW IT WORKS</h2>
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="step-card h-100">
+                    <div class="step-num">01</div>
+                    <span class="step-icon">⚔️</span>
+                    <h3 class="neon-text-blue">SELECT</h3>
+                    <p>Pick any two programming languages. Each one has unique stats — HP, Attack, Defense, and Speed.</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="glass-card text-center h-100">
-                    <h3 class="neon-text-purple mb-3">2. Arena</h3>
-                    <p class="text-secondary">AI, Web Dev, Game Dev, or Security. The domain changes the rules of the fight.</p>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="step-card h-100">
+                    <div class="step-num">02</div>
+                    <span class="step-icon">🏟️</span>
+                    <h3 class="neon-text-purple">ARENA</h3>
+                    <p>Choose the domain — AI, Web, Systems, or Enterprise. Each domain gives advantages to certain languages.</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="glass-card text-center h-100">
-                    <h3 class="neon-text-blue mb-3">3. Clash</h3>
-                    <p class="text-secondary">Enjoy Gemini AI's dynamic narration and learn about real-world language strengths.</p>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="step-card h-100">
+                    <div class="step-num">03</div>
+                    <span class="step-icon">💥</span>
+                    <h3 style="color:#f472b6; text-shadow: 0 0 10px #f472b6;">CLASH</h3>
+                    <p>Watch them fight with swords, dodge attacks, and finish with a gunshot. The stronger language wins.</p>
                 </div>
             </div>
         </div>
@@ -48,7 +267,37 @@
 </div>
 {% endblock %}
 
-{% block head %}
-<!-- Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% block scripts %}
+<script>
+    // Floating language icons
+    const icons = ['devicon-python-plain','devicon-java-plain','devicon-javascript-plain','devicon-cplusplus-plain','devicon-go-original-wordmark','devicon-rust-plain','devicon-typescript-plain','devicon-csharp-plain','devicon-swift-plain','devicon-ruby-plain','devicon-php-plain','devicon-c-plain'];
+    const container = document.getElementById('float-icons');
+    icons.forEach((icon, i) => {
+        const el = document.createElement('i');
+        el.className = icon + ' float-icon';
+        el.style.left = Math.random() * 90 + 5 + '%';
+        el.style.animationDuration = (15 + Math.random() * 20) + 's';
+        el.style.animationDelay = (Math.random() * 15) + 's';
+        el.style.fontSize = (2 + Math.random() * 3) + 'rem';
+        container.appendChild(el);
+    });
+
+    // Counter animation
+    document.querySelectorAll('.stat-num').forEach(el => {
+        const target = el.innerText;
+        if (target === '∞') return;
+        const num = parseInt(target);
+        el.innerText = '0';
+        const observer = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) {
+                gsap.to({ val: 0 }, {
+                    val: num, duration: 2, ease: "power2.out",
+                    onUpdate: function() { el.innerText = Math.round(this.targets()[0].val); }
+                });
+                observer.disconnect();
+            }
+        });
+        observer.observe(el);
+    });
+</script>
 {% endblock %}

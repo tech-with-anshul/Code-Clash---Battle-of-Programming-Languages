@@ -1,79 +1,276 @@
 {% extends 'base.html' %}
 
-{% block title %}Select Languages | Code Clash{% endblock %}
+{% block title %}Select Fighters | Code Clash{% endblock %}
 
 {% block head %}
-<!-- Devicon for Language Logos -->
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-    /* Selection Page Specific Styles */
-    .language-card {
+    /* ═══ PAGE ═══ */
+    .select-page { padding-bottom: 120px; }
+
+    /* ═══ HEADER ═══ */
+    .select-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .select-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #38bdf8, #c084fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.3rem;
+    }
+    .select-sub {
+        color: #64748b;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    /* ═══ COUNTER PILL ═══ */
+    .counter-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 24px;
+        background: rgba(15,23,42,0.7);
+        border: 2px solid rgba(255,255,255,0.1);
+        border-radius: 50px;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.85rem;
+        color: #94a3b8;
+        transition: all 0.3s ease;
+    }
+    .counter-pill.ready {
+        border-color: #22c55e;
+        color: #22c55e;
+        box-shadow: 0 0 20px rgba(34,197,94,0.2);
+    }
+    .counter-dot {
+        width: 28px; height: 28px;
+        border-radius: 50%;
+        background: #1e293b;
+        border: 2px solid #334155;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.7rem;
+        transition: all 0.3s ease;
+    }
+    .counter-dot.filled {
+        background: linear-gradient(135deg, #38bdf8, #818cf8);
+        border-color: #38bdf8;
+        color: #fff;
+        box-shadow: 0 0 12px rgba(56,189,248,0.4);
+    }
+
+    /* ═══ SELECTED PREVIEW ═══ */
+    .vs-preview {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin: 1.5rem 0;
+        min-height: 80px;
+    }
+    .vs-slot {
+        width: 70px; height: 70px;
+        border-radius: 50%;
+        background: rgba(15,23,42,0.6);
+        border: 2px dashed #334155;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2.5rem;
+        transition: all 0.4s ease;
+    }
+    .vs-slot.active {
+        border-style: solid;
+        border-color: #38bdf8;
+        background: rgba(56,189,248,0.1);
+        box-shadow: 0 0 20px rgba(56,189,248,0.2);
+    }
+    .vs-slot:nth-child(3).active {
+        border-color: #c084fc;
+        background: rgba(192,132,252,0.1);
+        box-shadow: 0 0 20px rgba(192,132,252,0.2);
+    }
+    .vs-label {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.5rem;
+        color: #ef4444;
+        text-shadow: 0 0 10px rgba(239,68,68,0.3);
+        font-weight: 900;
+    }
+
+    /* ═══ LANGUAGE GRID ═══ */
+    .lang-card {
         cursor: pointer;
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 16px;
+        padding: 1.8rem 1.2rem;
+        text-align: center;
+        transition: all 0.35s ease;
         position: relative;
         overflow: hidden;
     }
-    
-    .language-card.selected {
-        border-color: var(--accent-blue);
-        box-shadow: var(--neon-blue);
-        transform: translateY(-5px);
-    }
-    
-    .language-card.selected::after {
-        content: '\f00c'; /* Font Awesome check */
-        font-family: 'Font Awesome 6 Free';
-        font-weight: 900;
+    .lang-card::before {
+        content: '';
         position: absolute;
-        top: 10px;
-        right: 15px;
-        color: var(--accent-blue);
-        font-size: 1.5rem;
-        text-shadow: var(--neon-blue);
+        top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: conic-gradient(transparent, rgba(56,189,248,0.05), transparent 30%);
+        animation: cardShine 6s linear infinite;
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
-    
-    .language-icon {
-        font-size: 4rem;
-        margin-bottom: 1rem;
-        color: white;
+    @keyframes cardShine { 100% { transform: rotate(360deg); } }
+    .lang-card:hover::before { opacity: 1; }
+    .lang-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(56,189,248,0.25);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
     }
 
+    /* Selected state */
+    .lang-card.selected {
+        border-color: #38bdf8;
+        background: rgba(56,189,248,0.08);
+        box-shadow: 0 0 25px rgba(56,189,248,0.15), 0 10px 30px rgba(0,0,0,0.3);
+        transform: translateY(-6px);
+    }
+    .lang-card.selected .check-badge {
+        opacity: 1;
+        transform: scale(1);
+    }
+    .check-badge {
+        position: absolute;
+        top: 10px; right: 10px;
+        width: 28px; height: 28px;
+        background: linear-gradient(135deg, #38bdf8, #818cf8);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.75rem;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.3s ease;
+    }
+
+    .lang-icon {
+        font-size: 3.5rem;
+        margin-bottom: 0.8rem;
+        color: #e2e8f0;
+        transition: transform 0.3s ease;
+    }
+    .lang-card:hover .lang-icon { transform: scale(1.15); }
+    .lang-card.selected .lang-icon { color: #38bdf8; }
+
+    .lang-name {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 0.6rem;
+    }
+    .lang-meta {
+        font-size: 0.7rem;
+        color: #4b5563;
+        line-height: 1.6;
+    }
+    .lang-meta span {
+        display: block;
+    }
+    .lang-stat-bar {
+        height: 3px;
+        background: #1e293b;
+        border-radius: 2px;
+        margin-top: 10px;
+        overflow: hidden;
+    }
+    .lang-stat-fill {
+        height: 100%;
+        border-radius: 2px;
+        background: linear-gradient(90deg, #38bdf8, #818cf8);
+        transition: width 0.5s ease;
+    }
+
+    /* ═══ PROCEED BUTTON ═══ */
     #proceed-btn-container {
         position: fixed;
-        bottom: 30px;
+        bottom: 25px;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translateX(-50%) translateY(80px);
         z-index: 100;
         opacity: 0;
         pointer-events: none;
-        transition: opacity 0.5s ease;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    
     #proceed-btn-container.show {
         opacity: 1;
         pointer-events: auto;
+        transform: translateX(-50%) translateY(0);
+    }
+    .proceed-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 40px;
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: #fff;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        border: none;
+        border-radius: 14px;
+        text-decoration: none;
+        box-shadow: 0 0 30px rgba(34,197,94,0.3), 0 8px 25px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+    }
+    .proceed-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0 50px rgba(34,197,94,0.4), 0 12px 35px rgba(0,0,0,0.4);
+        color: #fff;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container py-5" style="margin-bottom: 100px;">
-    <div class="text-center mb-5" data-aos="fade-down">
-        <h1 class="neon-text-blue">Select Your Fighters</h1>
-        <p class="text-secondary fs-5">Choose exactly 2 programming languages for the battle.</p>
-        <p id="selection-counter" class="text-warning fw-bold">Selected: 0 / 2</p>
+<div class="container select-page">
+    <!-- HEADER -->
+    <div class="select-header" data-aos="fade-down">
+        <h1 class="select-title">Choose Your Fighters</h1>
+        <p class="select-sub">Select exactly 2 programming languages to enter the arena</p>
+
+        <!-- Counter -->
+        <div class="counter-pill" id="counter-pill">
+            <div class="counter-dot" id="dot1">1</div>
+            <div class="counter-dot" id="dot2">2</div>
+            <span id="counter-text">Pick your fighters</span>
+        </div>
     </div>
 
-    <div class="row g-4" id="language-grid">
+    <!-- VS Preview -->
+    <div class="vs-preview" data-aos="fade-up" data-aos-delay="100">
+        <div class="vs-slot" id="slot1">?</div>
+        <span class="vs-label">VS</span>
+        <div class="vs-slot" id="slot2">?</div>
+    </div>
+
+    <!-- LANGUAGE GRID -->
+    <div class="row g-3" id="language-grid">
         {% for lang in languages %}
-        <div class="col-6 col-md-4 col-lg-3 language-card-container" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 50 }}">
-            <div class="glass-card language-card text-center h-100" data-lang-id="{{ lang.id }}">
-                <i class="{{ lang.icon }} language-icon"></i>
-                <h4 class="mb-2">{{ lang.name }}</h4>
-                <div class="small text-secondary text-start mt-3">
-                    <p class="mb-1"><i class="fas fa-user me-2"></i> {{ lang.creator }}</p>
-                    <p class="mb-1"><i class="fas fa-calendar me-2"></i> {{ lang.year }}</p>
-                    <p class="mb-1"><i class="fas fa-layer-group me-2"></i> {{ lang.difficulty }}</p>
-                    <p class="mb-0"><i class="fas fa-fire me-2"></i> {{ lang.popularity }}</p>
+        <div class="col-6 col-md-4 col-lg-3" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 40 }}">
+            <div class="lang-card" data-lang-id="{{ lang.id }}" data-lang-icon="{{ lang.icon }}">
+                <div class="check-badge"><i class="fas fa-check"></i></div>
+                <i class="{{ lang.icon }} lang-icon"></i>
+                <div class="lang-name">{{ lang.name }}</div>
+                <div class="lang-meta">
+                    <span>{{ lang.year }} · {{ lang.difficulty }}</span>
+                    <span>{{ lang.popularity }}</span>
+                </div>
+                <div class="lang-stat-bar">
+                    <div class="lang-stat-fill" style="width: {% if lang.popularity == 'Extremely High' %}95{% elif lang.popularity == 'Very High' %}85{% elif lang.popularity == 'High' %}70{% else %}55{% endif %}%;"></div>
                 </div>
             </div>
         </div>
@@ -81,7 +278,10 @@
     </div>
 </div>
 
+<!-- PROCEED -->
 <div id="proceed-btn-container">
-    <a href="#" class="btn-neon fs-4 px-5 py-3 shadow-lg bg-dark-glass">Proceed to Arena <i class="fas fa-arrow-right ms-2"></i></a>
+    <a href="#" class="proceed-btn">
+        Proceed to Arena <i class="fas fa-arrow-right"></i>
+    </a>
 </div>
 {% endblock %}
